@@ -87,8 +87,7 @@ local jumpState = {
 	end,
 
 	-- Local variables
-	jumpAmount = 2,
-	animationDone = true
+	jumpAmount = 2
 }
 
 
