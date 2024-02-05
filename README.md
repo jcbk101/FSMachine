@@ -4,7 +4,7 @@ In this project you will find an example of a simple Finite State Machine implem
 
 You will find FSM Controller under <a href="modules/fsm_engine.lua">`/modules/fsm_engine.lua`</a>. Example code is in <a href="main/main.script">`/main/main.script`</a>.
 
-A video showing this example can be found at: https://www.youtube.com/watch?v=42PGvmFFeWI
+A video showing this example can be found at: 
 
 
 ## What can the State Machine do?
