@@ -107,7 +107,7 @@ end
 
 Once all the above is successful, `update()' and `input()` can be accessed within the FSM by using the below...
 
-``'lua
+```lua
 ------------------------------------
 -- Input
 ------------------------------------
