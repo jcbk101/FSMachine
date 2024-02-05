@@ -14,7 +14,7 @@ A video showing this example can be found at: https://www.youtube.com/watch?v=42
 ####
 In the main script file, all states are created as local tables. IE: 
 
-`
+```lua
 ------------------------------------
 --
 ------------------------------------
@@ -46,7 +46,7 @@ local idleState = {
 	-- Local variables
 	is_exiting = false
 }
-`
+```
 
 
 ## Notes
