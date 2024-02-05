@@ -12,6 +12,11 @@ A video showing this example can be found at:
 ### Example: Script file
 <a href="main/main.script">`/main/main.script`</a>
 ####
+To utilize the FSM, it must first be inluded in the main script file so it and its functions cann be accessible.
+```lua
+local fsm = require("modules.fsm_engine")
+```
+
 In the main script file, all states are created as local tables. IE: 
 
 ```lua
@@ -74,8 +79,32 @@ local jumpState = {
 	-- Local variables
 	jumpAmount = 2
 }
-```
 
+{ ... }
+
+```
+With the state(s) defined within the scope of the current script, the FSM is initialized like so:
+
+```lua
+------------------------------------
+-- Init code 
+------------------------------------
+function init(self)
+	msg.post(".", "acquire_input_focus")
+
+        -- Allows access to the states and data directly for things such as condition checks.
+	self.states = {
+		idle = idleState,
+		run = runState,
+		air = airState,
+		jump = jumpState,
+		land = landState
+	}
+
+	self.fsm = fsm.createMachine(self.states)
+	self.fsm:changeState(self, "air")  -- Player starts off falling down
+end
+```
 
 ## Notes
 
