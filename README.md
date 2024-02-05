@@ -46,6 +46,34 @@ local idleState = {
 	-- Local variables
 	is_exiting = false
 }
+
+------------------------------------
+--
+------------------------------------
+local jumpState = {
+
+	init = function(self, parent)
+		if self.jumpAmount > 0 then
+			parent.velocity.y = jump_takeoff_speed * (self.jumpAmount == 2 and 1 or 0.75)
+			sprite.play_flipbook("#sprite", "jump" .. self.jumpAmount)
+			--
+			self.animationDone = false  -- Play animation to completion
+			self.jumpAmount = self.jumpAmount - 1
+			parent.ground_contact = false
+			--
+			--parent.key[hash("jump")] = nil  -- Clear jump key
+			self:changeState(parent, "air")
+		end
+	end,
+
+	-- Condition test
+	CanJump = function(self)
+		return (self.jumpAmount > 0 and true or false)
+	end,
+
+	-- Local variables
+	jumpAmount = 2
+}
 ```
 
 
