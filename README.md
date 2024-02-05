@@ -105,6 +105,25 @@ function init(self)
 end
 ```
 
+Once all the above is successful, `update()' and `input()` can be accessed within the FSM by using the below...
+
+``lua
+------------------------------------
+-- Input
+------------------------------------
+function on_input(self, action_id, action)
+	self.fsm:input(self, action_id, action)  -- Call to state machine
+end
+
+
+------------------------------------
+-- Update
+------------------------------------
+function fixed_update(self, dt)
+	self.fsm:fixed_update(self, dt)  -- Call to state machine
+end
+```
+
 ## Notes
 
 ### Access to States
