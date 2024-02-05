@@ -62,7 +62,6 @@ local jumpState = {
 			parent.velocity.y = jump_takeoff_speed * (self.jumpAmount == 2 and 1 or 0.75)
 			sprite.play_flipbook("#sprite", "jump" .. self.jumpAmount)
 			--
-			self.animationDone = false  -- Play animation to completion
 			self.jumpAmount = self.jumpAmount - 1
 			parent.ground_contact = false
 			--
