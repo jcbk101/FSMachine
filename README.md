@@ -1,4 +1,4 @@
-# Defold 2D Platform Finite State Machine
+# Defold 2D Platformer Finite State Machine
 
 In this project you will find an example of a simple Finite State Machine implementation for the <a href="www.defold.com">Defold game engine</a>, using Lua, without any plugins.
 
