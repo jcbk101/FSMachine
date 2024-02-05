@@ -10,7 +10,7 @@ A video showing this example can be found at:
 ## What can the State Machine do?
 
 ### Example: Script file
-`./main/main.script`
+<a href="main/main.script">`/main/main.script`</a>
 ####
 In the main script file, all states are created as local tables. IE: 
 
