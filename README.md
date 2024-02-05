@@ -119,7 +119,7 @@ end
 ------------------------------------
 -- Update
 ------------------------------------
-function fixed_update(self, dt)
+function update(self, dt)  -- or fixed_update(self, dt)  
 	self.fsm:fixed_update(self, dt)  -- Call to state machine
 end
 ```
