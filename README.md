@@ -135,7 +135,7 @@ In this implementation, manual positioning of any moving objects that are altere
 Use of the update function requires having placed either a `update(self, parent, dt)` or a `fixed_update(self, parent, dt)` function, being physics dependent.
 
 Note: I am attempting to figure a way to utilize multiple scripts attached to a single GO. This will allow for much cleaner code and state structure.
-I am trying to avoid using multiple `moduleState.lua` files to handle each state as these files will remain in memory. I wish to have the FSM released from
+I am trying to avoid using multiple `moduleState.lua` files to handle each state as these files will remain in memory. I wish to have the FSM's states released from
 memory when a script is removed (assuming a lua module is not).
 
 
