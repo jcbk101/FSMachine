@@ -12,7 +12,7 @@ A video showing this example can be found at:
 ### Example: Script file
 <a href="main/main.script">`/main/main.script`</a>
 ####
-To utilize the FSM, it must first be inluded in the main script file so it and its functions cann be accessible.
+To utilize the FSM, it must first be inluded in the main script file so it and its functions can be accessible.
 ```lua
 local fsm = require("modules.fsm_engine")
 ```
