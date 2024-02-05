@@ -2,7 +2,7 @@
 
 In this project you will find an example of a simple Finite State Machine implementation for the <a href="https://www.defold.com">Defold game engine</a>, using Lua, without any plugins.
 
-You will find FSM Controller under `/modules/fsm_engine.lua`. Example code is in `/main/main.script`.
+You will find FSM Controller under <a href="modules/fsm_engine.lua">`/modules/fsm_engine.lua`</a>. Example code is in `/main/main.script`.
 
 A video showing this example can be found at: https://www.youtube.com/watch?v=42PGvmFFeWI
 
