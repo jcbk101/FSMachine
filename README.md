@@ -1,20 +1,25 @@
-# Defold 2D Platform Finite State Machine
+# Defold 2D Platformer Finite State Machine
 
-In this project you will find an example of a simple Finite State Machine implementation for the <a href="www.defold.com">Defold game engine</a>, using Lua, without any plugins.
+In this project you will find an example of a simple Finite State Machine implementation for the <a href="https://www.defold.com">Defold game engine</a>, using Lua, without any plugins.
 
-You will find FSM Controller under `/modules/fsm_engine.lua`. Example code is in `/main/main.script`.
+You will find FSM Controller under <a href="modules/fsm_engine.lua">`/modules/fsm_engine.lua`</a>. Example code is in <a href="main/main.script">`/main/main.script`</a>.
 
-A video showing this example can be found at: https://www.youtube.com/watch?v=42PGvmFFeWI
+A video showing this example can be found at: 
 
 
 ## What can the State Machine do?
 
 ### Example: Script file
-`./main/main.script`
+<a href="main/main.script">`/main/main.script`</a>
 ####
+To utilize the FSM, it must first be inluded in the main script file so it and its functions can be accessible.
+```lua
+local fsm = require("modules.fsm_engine")
+```
+
 In the main script file, all states are created as local tables. IE: 
 
-`
+```lua
 ------------------------------------
 --
 ------------------------------------
@@ -46,20 +51,92 @@ local idleState = {
 	-- Local variables
 	is_exiting = false
 }
-`
 
+------------------------------------
+--
+------------------------------------
+local jumpState = {
+
+	init = function(self, parent)
+		if self.jumpAmount > 0 then
+			parent.velocity.y = jump_takeoff_speed * (self.jumpAmount == 2 and 1 or 0.75)
+			sprite.play_flipbook("#sprite", "jump" .. self.jumpAmount)
+			--
+			self.jumpAmount = self.jumpAmount - 1
+			parent.ground_contact = false
+			--
+			--parent.key[hash("jump")] = nil  -- Clear jump key
+			self:changeState(parent, "air")
+		end
+	end,
+
+	-- Condition test
+	CanJump = function(self)
+		return (self.jumpAmount > 0 and true or false)
+	end,
+
+	-- Local variables
+	jumpAmount = 2
+}
+
+{ ... }
+
+```
+With the state(s) defined within the scope of the current script, the FSM is initialized like so:
+
+```lua
+------------------------------------
+-- Init code 
+------------------------------------
+function init(self)
+	msg.post(".", "acquire_input_focus")
+
+        -- Allows access to the states and data directly for things such as condition checks.
+	self.states = {
+		idle = idleState,
+		run = runState,
+		air = airState,
+		jump = jumpState,
+		land = landState
+	}
+
+	self.fsm = fsm.createMachine(self.states)
+	self.fsm:changeState(self, "air")  -- Player starts off falling down
+end
+```
+
+Once all the above is successful, `update()` and `input()` can be accessed within the FSM by using the below...
+
+```lua
+------------------------------------
+-- Input
+------------------------------------
+function on_input(self, action_id, action)
+	self.fsm:input(self, action_id, action)  -- Call to state machine
+end
+
+
+------------------------------------
+-- Update
+------------------------------------
+function update(self, dt)  -- or fixed_update(self, dt)  
+	self.fsm:fixed_update(self, dt)  -- Call to state machine
+end
+```
 
 ## Notes
 
 ### Access to States
 
-In Defold, each script that utilizes the FSM should contain at minimum a `function init(self)` function. 
+In Defold, each script that utilizes the FSM should contain at minimum a `function init(self, parent)` function. 
 
 In this implementation, manual positioning of any moving objects that are altered by a State, should be handled in that State's `update()` function.
 
 Use of the update function requires having placed either a `update(self, parent, dt)` or a `fixed_update(self, parent, dt)` function, being physics dependent.
 
 Note: I am attempting to figure a way to utilize multiple scripts attached to a single GO. This will allow for much cleaner code and state structure.
+I am trying to avoid using multiple `moduleState.lua` files to handle each state as these files will remain in memory. I wish to have the FSM's states released from
+memory when a script is removed (assuming a lua module is not).
 
 
 ### Is this production ready?
