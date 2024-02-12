@@ -1,64 +1,96 @@
 local fsm = require("modules.fsm_engine")
-local utils = require("modules.utils")
 
 local gravity = -2200
 local jump_takeoff_speed = 1100
 local max_speed = 500
 local air_acceleration_factor = 0.8
-local ANGLE_THRESHOLD = 45
-local NORMAL_THRESHOLD = 0.7
+local slopeDistance = 10
+
+
+-------------------------------
+--
+-------------------------------
+local function Perpendicular( vector, CW ) -- Default: Counter clock wise, CW == true and Clock wise
+	if CW then
+		return vmath.vector3(vector.y, -vector.x, vector.z)	
+	else
+		return vmath.vector3(-vector.y, vector.x, vector.z)	
+	end
+end
+
+-------------------------------
+--
+-------------------------------
+local function Angle( from, to )
+	local dot = vmath.dot( vmath.normalize(from), vmath.normalize(to))
+	local acos = math.acos( dot )
+	local deg = math.deg(acos)
+
+	return deg
+end
+
+
+-------------------------------
+--
+-------------------------------
+local function CheckVertical(self, position)
+	
+	local to = vmath.vector3(position.x, (position.y - self.sprSize.y * .5) - slopeDistance , position.z)
+	local ang = 0
+	local hit = physics.raycast(position, to, { hash("ground") })
+
+	if hit then		
+		self.slopeNormalPerp = Perpendicular(hit.normal) -- Counter close wise
+		self.slopeNormalPerp = vmath.normalize(self.slopeNormalPerp)
+		ang = Angle( hit.normal, vmath.vector3(0, 1, 0))
+
+		--msg.post("@render:", "draw_line", { start_point = to, end_point = position, color = vmath.vector4(0, 1, 1, 1) })
+		msg.post("@render:", "draw_line", { start_point = hit.position, end_point = position, color = vmath.vector4(0, 1, 1, 1) })		
+		msg.post("@render:", "draw_line", { start_point = hit.position, end_point = Perpendicular(position) , color = vmath.vector4(1, 1, 0, 1) })		
+		
+		-- if ang == 0 then
+		-- 	self.isOnSlope = false
+		-- else
+		-- 	self.isOnSlope = true
+		-- end		
+	end
+
+	return nil
+end
 
 
 ---------------------------------
 --
 ---------------------------------
-local function SlopeCheck(self, position)
+local function SlopeCheck(self)
 
-	--local size = go.get("#sprite", "size")
-	local scale = go.get("#sprite", "scale")
-	local slopeDistance = max_speed * 0.25
-	local size = vmath.mul_per_elem(self.sprSize, scale)
+	local pos = go.get_position()
 
-	local from = vmath.vector3(position.x, position.y, position.z)	
-	local to = vmath.vector3(from.x + (self.direction * 32), (from.y - size.y * .5) - slopeDistance , from.z)	
-	local toC = vmath.vector3(from.x, (from.y - size.y * .5) - slopeDistance , from.z)		
-	local hit = physics.raycast(from, to, { hash("ground") })
-	local hitC = physics.raycast(from, toC, { hash("ground") })
-	local ang = 0
+	--CheckHorizontal(self, pos)
+	CheckVertical(self, pos)
+end
 
-	if hit and hitC then
-		if vmath.length(from - hit.position) > vmath.length(from - hitC.position) then
-			hit = nil
-			hit = hitC
+
+---------------------------------
+--
+---------------------------------
+local function getAnimationFrames(self, anim)
+
+	local path = go.get("#sprite", "image")
+	local ts_info = resource.get_atlas(path)
+
+	for i = 1, #ts_info.animations do
+		if hash(ts_info.animations[i].id) == anim then
+			local frames, fps = go.get("#sprite", "frame_count"), ts_info.animations[i].fps
+			local time = (1.0 / fps) * frames
+			return { frames = frames, fps = fps, time = time }
 		end
 	end
 
-	-- No snapping if not a ground hit
-	self.slopeY = nil
-
-	--msg.post("@render:", "draw_line", { start_point = to, end_point = from, color = vmath.vector4(1, 0, 1, 1) })	
-	--msg.post("@render:", "draw_line", { start_point = toC, end_point = from, color = vmath.vector4(0, 1, 1, 1) })		
-
-	if hit then
-		local sign = (hit.normal.x > 0 and -1 or 1)
-		self.slopeNormalPerp = utils.Perpendicular(hit.normal) -- Counter clock wise
-		ang = utils.Angle( hit.normal, vmath.vector3(0, 1, 0))
-		-- Rotate the object according to the slope
-		--		go.set(".", "euler.z", ang * sign)
-		self.slopeY = hit.position.y + size.y *.5
-		--msg.post("@render:", "draw_line", { start_point = hit.position, end_point = from, color = vmath.vector4(1, 1, 1, 1) })			
-	end	
-
-	if ang == 0 then
-		self.isOnSlope = nil
-	else
-		if ang > ANGLE_THRESHOLD + 1 then
-			self.slopeY = nil
-			self.isOnSlope = nil
-		else
-			self.isOnSlope = true
-		end
-	end
+	-- Default FPS
+	local frames, fps = go.get("#sprite", "frame_count"), ts_info.animations[1].fps
+	local time = (1.0 / 10.) * frames
+	return { frames = frames, fps = fps, time = time }
 end
 
 
@@ -68,14 +100,11 @@ end
 local idleState = {
 	init = function(self, parent)
 		self.is_exiting = false
-		-- Change to Idle ONLY is not already idling
+		--
 		if go.get("#sprite", "animation") ~= hash("idle") then
 			sprite.play_flipbook("#sprite", "idle")
 		end
-		parent.velocity.y = 0
 		parent.velocity.x = 0
-		parent.isOnSlope = nil
-		self.falls = 0
 	end,
 
 	exit = function(self, parent)
@@ -87,49 +116,29 @@ local idleState = {
 			if (action_id == hash("left") or action_id == hash("right")) and (action.value and action.value > 0) then
 				self:changeState(parent, "run")
 
-			elseif action_id == hash("jump") and (action and action.pressed) and parent.states.jump:CanJump() then
+			elseif action_id == hash("jump") and parent.states.jump:CanJump() then
 				self:changeState(parent, "jump")
 			end
 		end		
 	end,
 
 	fixed_update = function(self,parent,dt)
-
-		local pos = go.get_position()
-
-		-- Handle slope contact
-		SlopeCheck(parent, pos)
-
-		if parent.isOnSlope then
-			parent.ground_contact = true
-			parent.velocity.y = 0
-			pos.y = parent.slopeY
-			pos.x = (pos.x + parent.velocity.x * dt)
-		else
-			if parent.slopeY then
-				parent.ground_contact = true
-				parent.velocity.y = 0
-				pos.y = parent.slopeY				
-			else
-				parent.velocity.y = parent.velocity.y + (gravity * dt)
-				if parent.velocity.y < -1250.0 then 
-					parent.velocity.y = -1250.0
-				end
-				pos = (pos + parent.velocity * dt)
-			end
+		parent.velocity.y = parent.velocity.y + (gravity * dt)
+		if parent.velocity.y < -1250.0 then 
+			parent.velocity.y = -1250.0
 		end
 
-		-----------------------------------------
 		if not parent.ground_contact then
-			-- Swicth the animation here. 
-			-- Calling from from 'AIR STATE' can disrupt a jump animation
+			print("Fall")
 			sprite.play_flipbook("#sprite", "fall")
 			self:changeState(parent, "air")
 			return
 		end		
 
-		------------------------------------
+		local pos = go.get_position()
+		pos = pos + parent.velocity * dt
 		go.set_position(pos)
+
 		if parent.ground_contact == true then
 			parent.velocity.y = 0
 		end				
@@ -138,8 +147,7 @@ local idleState = {
 	end,
 
 	-- Local variables
-	is_exiting = false,
-	falls = 0
+	is_exiting = false
 }
 
 
@@ -152,9 +160,11 @@ local jumpState = {
 		if self.jumpAmount > 0 then
 			parent.velocity.y = jump_takeoff_speed * (self.jumpAmount == 2 and 1 or 0.75)
 			sprite.play_flipbook("#sprite", "jump" .. self.jumpAmount)
-			-------------------------------------
+			--
 			self.jumpAmount = self.jumpAmount - 1
 			parent.ground_contact = false
+			--
+			--parent.key[hash("jump")] = nil  -- Clear jump key
 			self:changeState(parent, "air")
 		end
 	end,
@@ -176,27 +186,21 @@ local airState = {
 
 	init = function(self, parent)
 		self.is_exiting = false
-		parent.isOnSlope = nil
-		parent.slopeY = nil				
 	end,
 
-	-----------------------------------------
 	exit = function(self, parent)
 		self.is_exiting = true
 	end,
 
-	-----------------------------------------
 	input = function(self, parent, action_id, action)
 		if not self.is_exiting then
 			if (action_id == hash("left") or action_id == hash("right")) and (action.value and action.value ~= 0) then
 				if action_id == hash("left") then
 					sprite.set_hflip("#sprite", true)
 					parent.velocity.x = -max_speed * air_acceleration_factor
-					parent.direction = -1
 				elseif action_id == hash("right") then
 					sprite.set_hflip("#sprite", false)
-					parent.velocity.x = max_speed * air_acceleration_factor
-					parent.direction = 1
+					parent.velocity.x = max_speed * air_acceleration_factor				
 				end
 			else
 				parent.velocity.x = 0
@@ -208,7 +212,7 @@ local airState = {
 					if parent.velocity.y > 0 then
 						parent.velocity.y = parent.velocity.y * 0.5
 					end
-				elseif (action and action.pressed) and parent.states.jump:CanJump() then
+				elseif (action and action.pressed) and  parent.states.jump:CanJump() then
 					parent.states.jump.jumpAmount = 1 -- Only allow air jump
 					self:changeState(parent, "jump")
 				end
@@ -216,11 +220,8 @@ local airState = {
 		end
 	end,
 
-	-----------------------------------------	
 	fixed_update = function(self, parent, dt)
 		if not self.is_exiting then		
-			local pos = go.get_position()
-
 			-- Apply gravity
 			if not parent.ground_contact then			
 				parent.velocity.y = parent.velocity.y + (gravity * dt)
@@ -228,18 +229,10 @@ local airState = {
 					parent.velocity.y = -1250.0
 				end
 
-				-- Allow the player to move away from the wal
+				local pos = go.get_position()
 				pos = (pos + parent.velocity * dt)
-				if parent.wall_contact then
-					parent.velocity.x = 0
-				end
-
-				--------------------------------------
-				go.set_position(pos)
-				parent.wall_cntact = false
-				parent.correction.x, parent.correction.y, parent.correction.z = 0, 0, 0
+				go.set_position(pos)			
 			else
-				-- Player is touching earth. Switch state to LANDING
 				self:changeState(parent, "land")
 			end
 		end
@@ -258,20 +251,19 @@ local landState = {
 	init = function(self, parent)
 		self.is_exiting = false
 		parent.states.jump.jumpAmount = 2
+		--		parent.states.jump.canDoubleJump = false
 	end,
 
-	-----------------------------------------
 	exit = function(self, parent)
 		self.is_exiting = true
 	end,
 
-	-----------------------------------------
 	fixed_update = function(self, parent, dt)
 		if not self.is_exiting then
 			if parent.velocity.x ~= 0 then
 				self:changeState(parent, "run")
 			else
-				--parent.velocity.x = 0
+				parent.velocity.x = 0
 				self:changeState(parent, "idle")
 			end
 		end
@@ -293,21 +285,19 @@ local runState = {
 		sprite.play_flipbook("#sprite", "run")
 	end,
 
-	-----------------------------------------
 	exit = function(self, parent)
 		self.is_exiting = true
 	end,
 
-	-----------------------------------------
 	input = function(self, parent, action_id, action)
 		if not self.is_exiting then			
-			if action_id == hash("jump") and (action and action.pressed) and parent.states.jump:CanJump() then
+			if action_id == hash("jump") and action.pressed and parent.states.jump:CanJump() then
 				self:changeState(parent, "jump")
-				parent.isOnSlope = nil
-				return
+
 			elseif (action_id == hash("left") or action_id == hash("right")) then
 				if (action.value and action.value == 0) then
 					self:changeState(parent, "idle")
+					parent.velocity.x = 0
 				else
 					if action_id == hash("left") and action.value and action.value > 0 then
 						sprite.set_hflip("#sprite", true)
@@ -323,69 +313,53 @@ local runState = {
 		end			
 	end,
 
-	-----------------------------------------
 	fixed_update = function(self, parent, dt)
 		if not self.is_exiting then		
-			local pos = go.get_position()
 
-			-- Handle slope contact and walking
-			SlopeCheck(parent, pos)
-
-			if parent.ground_contact == true then
-				parent.velocity.y = 0
-			end		
-
-			if parent.isOnSlope then
-				parent.ground_contact = true
-				parent.velocity.y = 0
-				--pos.y = parent.slopeY + parent.sprSize.y *.5
-				pos.y = parent.slopeY				
-				pos.x = (pos.x + parent.velocity.x * dt)
-			else
-				if parent.slopeY then
-					parent.ground_contact = true
-					parent.velocity.y = 0
-					--pos.y = parent.slopeY + parent.sprSize.y *.5
-					pos.y = parent.slopeY					
-					pos.x = (pos.x + parent.velocity.x * dt)					
-				else
-					parent.velocity.y = parent.velocity.y + (gravity * dt)
-					if parent.velocity.y < -1250.0 then 
-						parent.velocity.y = -1250.0
-					end
-					pos = (pos + parent.velocity * dt)
-				end
+			parent.velocity.y = parent.velocity.y + (gravity * dt)
+			if parent.velocity.y < -1250.0 then 
+				parent.velocity.y = -1250.0
 			end
 
-			-- Reset X after moving so the player does not stick to a wall
-			if parent.wall_contact then
-				parent.velocity.x = 0
-			end
+			SlopeCheck(parent)
 
 			if not parent.ground_contact then
-				-- Done to prevent false 'FALL'  and twitching
-				if self.falls > 5 then 
+				if   self.falls > 10 then					
+					print("Fall")
 					sprite.play_flipbook("#sprite", "fall")
 					self:changeState(parent, "air")
 					return
 				else
-					self.falls = self.falls + 1
-				end
+					self.falls =  self.falls + 1
+				end	
 			else
 				self.falls = 0
 			end		
 
-			--------------------------------
+			local pos = go.get_position()
+
+			if parent.isOnSlope then
+				--				parent.velocity.x = (max_speed * -parent.direction) * parent.slopeNormalPerp.x
+				parent.velocity.y = (max_speed * -parent.direction) * parent.slopeNormalPerp.y
+				pos = (pos + parent.velocity * dt)
+			else
+				pos = (pos + parent.velocity * dt)
+			end
+
 			go.set_position(pos)
+
+			-- 
+			if parent.ground_contact == true then
+				parent.velocity.y = 0
+			end				
 			parent.ground_contact = false
-			parent.wall_contact = false
 			parent.correction.x, parent.correction.y, parent.correction.z = 0, 0, 0			
 		end
 	end,
 
 	-- Local variables
 	is_exiting = false,
-	falls = 0 -- Counter to help against false FALL positives
+	falls = 0
 }
 
 ------------------------------------
@@ -394,9 +368,9 @@ local runState = {
 function init(self)
 	msg.post(".", "acquire_input_focus")
 	msg.post("/camera", "acquire_camera_focus")
-	go.set_parent("/camera", ".")	
+	--go.set_parent("/camera", ".")	
 	msg.post("@render:", "use_camera_projection")
-
+	--go.set("/camera#camera", "orthographic_zoom", .3)
 
 	self.sprSize = go.get("#sprite", "size")
 	self.origin = go.get_position()
@@ -404,26 +378,13 @@ function init(self)
 	self.ground_contact = nil
 	self.correction = vmath.vector3()
 	self.direction = 1
-	self.slopeY = 0
-	self.isOnSlope = nil
 
 	self.states = {
 		idle = idleState,
 		run = runState,
-		-- crouch = crouchState,
-		-- crawl = crawlState,
 		air = airState,
 		jump = jumpState,
-		land = landState,
-		--throw = throwState,
-		--hurt = hurtState,
-		-- push = pushState,
-		-- pull = pushState,
-		-- confused = confusedState,
-		-- frozen = frozenState,
-		-- slow = slowState,
-		-- paralyzed = paralyzedState,
-		-- dead = deadState				
+		land = landState
 	}
 
 	self.fsm = fsm.createMachine(self.states)
@@ -442,23 +403,33 @@ end
 ------------------------------------
 -- Update
 ------------------------------------
-function fixed_update(self, dt)		
+function fixed_update(self, dt)	
+	local position = go.get_position()
+	-- 	local to = vmath.vector3(position.x, (position.y - self.sprSize.y * .5) - slopeDistance, position.z)
+	-- 
+	-- 	local toFront = vmath.vector3(position.x + slopeDistance, (position.y - self.sprSize.y * .5) - slopeDistance, position.z)
+	-- 	local toBack = vmath.vector3(position.x - slopeDistance, (position.y - self.sprSize.y * .5) - slopeDistance, position.z)
+	-- 
+	-- 	msg.post("@render:", "draw_line", { start_point = position, end_point = toFront, color = vmath.vector4(1, 0, 0, 1) })
+	-- 	msg.post("@render:", "draw_line", { start_point = position, end_point = toBack, color = vmath.vector4(0, 0, 1, 1) })		
+	-- 	msg.post("@render:", "draw_line", { start_point = position, end_point = to, color = vmath.vector4(0, 1, 0, 1) })		
+	-- 
 	self.fsm:fixed_update(self, dt) -- Call to state machine
 
-	-- local pos = go.get_position()
-	-- go.set_position(vmath.vector3(pos.x, pos.y, pos.z), "/camera")
+	local p = go.get_position("camera")
+	go.set_position( vmath.vector3(position.x, position.y, p.z), "camera")
 end
 
 
 ---------------------------------
 -- Collision code used with 
 -- Kinematic bodies. Gives better
--- Control over Dynamic bodies
+--  control over Dynamic bodies
 ---------------------------------
-local function handle_obstacle_contact(self, normal, distance, yAxis)
+-- https://defold.com/manuals/physics/#resolving-kinematic-collisions
+local function handle_obstacle_contact(self, normal, distance)
 
 	local comp = vmath.vector3()
-	local angle = utils.Angle(normal, vmath.vector3(0,1,0))
 
 	if distance > 0 then
 		-- First, project the accumulated correction onto
@@ -466,13 +437,7 @@ local function handle_obstacle_contact(self, normal, distance, yAxis)
 		local proj = vmath.project(self.correction, normal * distance)
 		if proj < 1 then
 			-- Only care for projections that do not overshoot.		
-			comp = ((distance - distance * proj) * normal)
-
-			if self.isOnSlope then
-				comp.y = 0
-				comp.x = 0
-			end
-
+			comp = ((distance - distance * proj) * normal)			
 			go.set_position(go.get_position() + comp)
 			-- Accumulate correction done
 			self.correction = self.correction + comp
@@ -480,19 +445,20 @@ local function handle_obstacle_contact(self, normal, distance, yAxis)
 	end
 
 	-- Collided with a wall. Stop horizontal movement	
-	-- We Hit a wall when the angle is greater than the angle threshold
-	if angle > ANGLE_THRESHOLD then
+	if math.abs(normal.x) > 0.5 then
+		--print(normal) 
 		self.wall_contact = true
 	end
 
-	-- Collided with the ground
-	if normal.y > NORMAL_THRESHOLD then
+	-- collided with the ground
+	--if self.velocity.y < 0 then
+	if normal.y > 0.5 then
 		self.ground_contact = true
 	end
 
 
 	-- Collided with the head on object. Stop upward movement
-	if normal.y < -NORMAL_THRESHOLD then		
+	if normal.y < -0.7 then		
 		if self.velocity.y < 0.0 then
 			self.velocity.y = self.velocity.y * 2  -- Prevent sticking to moving platforms
 		else
@@ -518,18 +484,5 @@ end
 
 function final(self)
 	self.fsm.purge(self)
-
-	if package.loaded["modules.fsm_engine"] then
-		package.loaded["modules.fsm_engine"] = nil
-	end
-
-	if package.loaded["modules.utils"] then
-		package.loaded["modules.utils"] = nil
-	end
-
-	utils = nil
 	self.fsm = nil
-	-- Garbage collection
-	collectgarbage()
 end
-

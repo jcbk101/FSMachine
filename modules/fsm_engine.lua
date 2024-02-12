@@ -15,6 +15,7 @@ local function linkMetaTables( tbls, FSM )
 	end
 end
 
+
 -------------------------------------------
 --
 -------------------------------------------
@@ -99,7 +100,18 @@ function M.createMachine( states )
 		return FSM.currentState
 	end
 
+	-----------------------------------------------
+	-- Clean memory
+	-----------------------------------------------
+	function FSM.purge(parent)
+		for key, obj in pairs(FSM.states) do
+			setmetatable(FSM.states[key], nil)
+			FSM.states[key] = nil
+		end		
+	end
+	
 	return FSM
 end
+
 
 return M
