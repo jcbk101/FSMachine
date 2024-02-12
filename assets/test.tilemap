@@ -22,7 +22,7 @@ layers {
   cell {
     x: 2
     y: 0
-    tile: 1
+    tile: 56
     h_flip: 0
     v_flip: 0
     rotate90: 0
@@ -30,7 +30,7 @@ layers {
   cell {
     x: 3
     y: 0
-    tile: 1
+    tile: 59
     h_flip: 0
     v_flip: 0
     rotate90: 0
@@ -511,6 +511,22 @@ layers {
     x: -1
     y: 0
     tile: 52
+    h_flip: 0
+    v_flip: 0
+    rotate90: 0
+  }
+  cell {
+    x: 2
+    y: 1
+    tile: 46
+    h_flip: 0
+    v_flip: 0
+    rotate90: 0
+  }
+  cell {
+    x: 3
+    y: 1
+    tile: 49
     h_flip: 0
     v_flip: 0
     rotate90: 0
