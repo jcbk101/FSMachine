@@ -8,5 +8,6 @@ Thumbs.db
 .project
 .cproject
 *.cs
+*Copy.script
 *.exe
 builtins
