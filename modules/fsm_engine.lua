@@ -19,17 +19,25 @@ end
 -------------------------------------------
 --
 -------------------------------------------
-function M.createMachine( states )
+function M.createMachine( states, functions )
 
 	-- assert( states, "Error: Machines need to be pssed to this class." )
 	-- assert( #states == 0, "Error: Machines need to be pssed to this class." )
-	
+
 	local FSM = { 
 		is_paused = false, 
 		states = states or {},
 		currentState = nil,
 		lastState = nil,
 	}
+
+	-- All sub states need to be able to access the functions from
+	-- The main player state, considered a 'super' state
+	-- Link the metatable
+	if functions and type(functions) == "table" then
+		functions.__index = functions
+		setmetatable(FSM, functions)
+	end
 
 	-- Link metatables
 	FSM.__index = FSM
@@ -42,7 +50,7 @@ function M.createMachine( states )
 	-----------------------------------------------
 	-- Transition to a new state: Setter :)
 	-----------------------------------------------
-	function FSM:changeState( parent, requestedState )
+	function FSM:changeState( parent, requestedState, options )
 		-- State must exist!
 		if FSM.states[ requestedState ] == nil then
 			return nil
@@ -55,15 +63,19 @@ function M.createMachine( states )
 			end 
 		end
 
-		-- Save ref to the state being changed to
-		FSM.lastState = requestedState
 		-- Get the state requested and run it
 		FSM.currentState = FSM.states[ requestedState ]
 
 		-- Run init code
-		if FSM.currentState.init and FSM.currentState.init ~= FSM.init then
-			FSM.currentState:init(parent)
-		end 
+		if FSM.currentState then
+			-- Save ref to the state being changed to
+			FSM.lastState = FSM.currentStateId
+			FSM.currentStateId = requestedState
+
+			if FSM.currentState.init and FSM.currentState.init ~= FSM.init then			
+				FSM.currentState:init(parent, options)
+			end 
+		end
 	end
 
 	-----------------------------------------------
@@ -109,7 +121,7 @@ function M.createMachine( states )
 			FSM.states[key] = nil
 		end		
 	end
-	
+
 	return FSM
 end
 

@@ -16,11 +16,31 @@ key_trigger {
 }
 key_trigger {
   input: KEY_SPACE
-  action: "shoot"
+  action: "throw"
 }
 key_trigger {
   input: KEY_LCTRL
   action: "jump"
+}
+key_trigger {
+  input: KEY_F
+  action: "freeze"
+}
+key_trigger {
+  input: KEY_C
+  action: "confuse"
+}
+key_trigger {
+  input: KEY_H
+  action: "hurt"
+}
+key_trigger {
+  input: KEY_D
+  action: "death"
+}
+key_trigger {
+  input: KEY_S
+  action: "stun"
 }
 mouse_trigger {
   input: MOUSE_BUTTON_1

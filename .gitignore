@@ -8,6 +8,8 @@ Thumbs.db
 .project
 .cproject
 *.cs
+*.ini
 *Copy*.script
 *.exe
+/new_pup
 builtins

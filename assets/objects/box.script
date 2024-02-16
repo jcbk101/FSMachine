@@ -1,0 +1,25 @@
+function init(self)
+	self.canPush = nil
+	self.push_timer = 1
+end
+
+function update(self, dt)
+	if self.canPush then
+
+	elseif self.push_timer then
+		self.push_timer = self.push_timer - dt
+		if self.push_timer <= 0 then
+			self.canPush = true
+		end
+	end
+end
+
+
+function on_message(self, message_id, message, sender)
+	if message_id == hash("contact_point_response") then
+		if message.other_group == hash("player") then
+
+		end
+	end
+end
+

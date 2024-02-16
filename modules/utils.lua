@@ -1,26 +1,28 @@
 local utils =  {}
 
--------------------------------
---
----------------------------------
-function utils.getAnimationFrames(sprite_id, anim)
-
-	local path = go.get(sprite_id, "image")
-	local ts_info = resource.get_atlas(path)
-
-	for i = 1, #ts_info.animations do
-		if hash(ts_info.animations[i].id) == anim then
-			local frames, fps = go.get(sprite_id, "frame_count"), ts_info.animations[i].fps
-			local time = (1.0 / fps) * frames
-			return { frames = frames, fps = fps, time = time }
-		end
-	end
-
-	-- Default FPS
-	local frames, fps = go.get(sprite_id, "frame_count"), ts_info.animations[1].fps
-	local time = (1.0 / 10.) * frames
-	return { frames = frames, fps = fps, time = time }
-end
+-- -------------------------------
+-- --
+-- ---------------------------------
+-- function utils.getAnimationFrames(sprite_id, anim)
+-- 
+-- 	local path = go.get(sprite_id, "image")
+-- 	local ts_info = resource.get_atlas(path)
+-- 
+-- 	for i = 1, #ts_info.animations do
+-- 		if hash(ts_info.animations[i].id) == hash(anim) then
+-- 			--local frames, fps = go.get(sprite_id, "frame_count"), ts_info.animations[i].fps
+-- 			local frames = ts_info.animations[i].frame_end - ts_info.animations[i].frame_start
+-- 			local fps = ts_info.animations[i].fps
+-- 			local time = (1.0 / fps) * frames
+-- 			return { frames = frames, fps = fps, time = time }
+-- 		end
+-- 	end
+-- 
+-- 	-- Default FPS
+-- 	local frames, fps = go.get(sprite_id, "frame_count"), ts_info.animations[1].fps
+-- 	local time = (1.0 / 10.) * frames
+-- 	return { frames = frames, fps = fps, time = time }
+-- end
 
 -------------------------------
 --
