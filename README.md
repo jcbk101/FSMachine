@@ -17,70 +17,64 @@ To utilize the FSM, it must first be inluded in the main script file so it and i
 local fsm = require("modules.fsm_engine")
 ```
 
-In the main script file, all states are created as local tables. IE: 
+In the main script file, all states are created using Module references. IE: 
 
 ```lua
-------------------------------------
---
-------------------------------------
-local idleState = {
-	init = function(self, parent)
-		self.is_exiting = false
-		--
-		if go.get("#sprite", "animation") ~= hash("idle") then
-			sprite.play_flipbook("#sprite", "idle")
-		end
-		parent.velocity.x = 0
-	end,
+-- Super state: Contains shared functions
+local playerState = require("player.states.playerState") -- State that contains shared functions
+-- Sub state
+local landState = require("player.states.landState")
+```
 
-	exit = function(self, parent)
-		self.is_exiting = true
-	end,
+Each lua module will have code structured as below...
 
-	input = function(self, parent, action_id, action)
-		if not self.is_exiting then
-			if (action_id == hash("left") or action_id == hash("right")) and (action.value and action.value > 0) then
+```lua
+local M = {}
+
+-- Local variables
+M.is_exiting = false
+
+-----------------------------------
+-- Initialize state
+-----------------------------------
+M.init = function(self, parent)
+	self.is_exiting = false
+	parent.states.jump.jumpAmount = 2
+end
+
+-----------------------------------
+-- Exit state
+-----------------------------------
+M.exit = function(self, parent)
+	self.is_exiting = true
+end
+
+
+-----------------------------------
+-- Fixed update function
+-----------------------------------
+M.fixed_update = function(self, parent, dt)
+	if not self.is_exiting then
+		local anim = go.get("#sprite", "animation")
+
+		if parent.velocity.x ~= 0 then
+			if anim == hash("crouch") then
+				self:changeState(parent, "crawl")
+			else
 				self:changeState(parent, "run")
-
-			elseif action_id == hash("jump") and parent.states.jump:CanJump() then
-				self:changeState(parent, "jump")
 			end
-		end		
-	end,
-
-	-- Local variables
-	is_exiting = false
-}
-
-------------------------------------
---
-------------------------------------
-local jumpState = {
-
-	init = function(self, parent)
-		if self.jumpAmount > 0 then
-			parent.velocity.y = jump_takeoff_speed * (self.jumpAmount == 2 and 1 or 0.75)
-			sprite.play_flipbook("#sprite", "jump" .. self.jumpAmount)
-			--
-			self.jumpAmount = self.jumpAmount - 1
-			parent.ground_contact = false
-			--
-			--parent.key[hash("jump")] = nil  -- Clear jump key
-			self:changeState(parent, "air")
+		else
+			-- Player is touching earth. Switch state to LANDING
+			if anim == hash("crouch") then
+				self:changeState(parent, "crouch")
+			else
+				self:changeState(parent, "idle")
+			end
 		end
-	end,
+	end	
+end
 
-	-- Condition test
-	CanJump = function(self)
-		return (self.jumpAmount > 0 and true or false)
-	end,
-
-	-- Local variables
-	jumpAmount = 2
-}
-
-{ ... }
-
+return M
 ```
 With the state(s) defined within the scope of the current script, the FSM is initialized like so:
 
@@ -100,9 +94,63 @@ function init(self)
 		land = landState
 	}
 
-	self.fsm = fsm.createMachine(self.states)
+	self.fsm = fsm.createMachine(self.states, playerState)
 	self.fsm:changeState(self, "air")  -- Player starts off falling down
 end
+```
+
+#Super State
+
+This is an optional state module that contains functions that can be accessed from within a sub state. IE:
+```lua
+local gravity = -2200
+local max_speed = 500
+local air_acceleration_factor = 0.8
+local ANGLE_THRESHOLD = 46
+local NORMAL_THRESHOLD = 0.7
+
+local M = {}
+
+---------------------------------
+-- Common gravity for states
+-- Thatsupport slopes
+---------------------------------
+function M.ApplyGravity(parent, pos, dt)
+
+	parent.velocity.y = parent.velocity.y + (gravity * dt)
+	if parent.velocity.y < -1250.0 then 
+		parent.velocity.y = -1250.0
+	end
+	pos = (pos + parent.velocity * dt)
+
+	return pos
+end
+
+-------------------------------
+--
+---------------------------------
+function M.getAnimationFrames(sprite_id, anim)
+
+	local path = go.get(sprite_id, "image")
+	local ts_info = resource.get_atlas(path)
+
+	for i = 1, #ts_info.animations do
+		if hash(ts_info.animations[i].id) == hash(anim) then
+			local frames = ts_info.animations[i].frame_end - ts_info.animations[i].frame_start
+			local fps = ts_info.animations[i].fps
+			local time = (1.0 / fps) * frames
+			return { frames = frames, fps = fps, time = time }
+		end
+	end
+
+	-- Default FPS
+	local frames, fps = go.get(sprite_id, "frame_count"), ts_info.animations[1].fps
+	local time = (1.0 / 10.) * frames
+	return { frames = frames, fps = fps, time = time }
+end
+
+return M
+
 ```
 
 Once all the above is successful, `update()` and `input()` can be accessed within the FSM by using the below...
@@ -132,11 +180,10 @@ In Defold, each script that utilizes the FSM should contain at minimum a `functi
 
 In this implementation, manual positioning of any moving objects that are altered by a State, should be handled in that State's `update()` function.
 
-Use of the update function requires having placed either a `update(self, parent, dt)` or a `fixed_update(self, parent, dt)` function, being physics dependent.
+Use of the update function requires having placed either a `update(self, parent, dt)` or a `fixed_update(self, parent, dt)` function, being physics dependent, within the module state code block as seen above.
 
-Note: I am attempting to figure a way to utilize multiple scripts attached to a single GO. This will allow for much cleaner code and state structure.
-I am trying to avoid using multiple `moduleState.lua` files to handle each state as these files will remain in memory. I wish to have the FSM's states released from
-memory when a script is removed (assuming a lua module is not).
+Note: <a href="modules/fsm_engine.lu">`/modules/fsm_engine.lua`</a> has code included that enables access to the functions within the `PLAYERSTATE` module, which is optional.
+
 
 
 ### Is this production ready?
