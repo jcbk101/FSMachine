@@ -104,13 +104,14 @@ end
 
 This is an optional state module that contains functions that can be accessed from within a sub state. IE:
 ```lua
-local gravity = -2200
-local max_speed = 500
-local air_acceleration_factor = 0.8
-local ANGLE_THRESHOLD = 46
-local NORMAL_THRESHOLD = 0.7
-
 local M = {}
+
+M.gravity = -2200
+M.jump_takeoff_speed = 1100
+M.max_speed = 500
+M.air_acceleration_factor = 0.8
+M.ANGLE_THRESHOLD = 46
+M.NORMAL_THRESHOLD = 0.7
 
 ---------------------------------
 -- Common gravity for states
