@@ -90,12 +90,13 @@ function init(self)
 		idle = idleState,
 		run = runState,
 		air = airState,
+		fall = fallState,
 		jump = jumpState,
 		land = landState
 	}
 
 	self.fsm = fsm.createMachine(self.states, playerState)
-	self.fsm:changeState(self, "air")  -- Player starts off falling down
+	self.fsm:changeState(self, "fall")  -- Player starts off falling down
 end
 ```
 
