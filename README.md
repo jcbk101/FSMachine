@@ -184,7 +184,7 @@ In this implementation, manual positioning of any moving objects that are altere
 
 Use of the update function requires having placed either a `update(self, parent, dt)` or a `fixed_update(self, parent, dt)` function, being physics dependent, within the module state code block as seen above.
 
-Note: <a href="modules/fsm_engine.lu">`/modules/fsm_engine.lua`</a> has code included that enables access to the functions within the `PLAYERSTATE` module, which is optional.
+Note: <a href="modules/fsm_engine.lua">`/modules/fsm_engine.lua`</a> has code included that enables access to the functions within the `PLAYERSTATE` module, which is optional.
 
 
 
