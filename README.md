@@ -115,7 +115,7 @@ M.NORMAL_THRESHOLD = 0.7
 
 ---------------------------------
 -- Common gravity for states
--- Thatsupport slopes
+-- That support slopes
 ---------------------------------
 function M.ApplyGravity(parent, pos, dt)
 
