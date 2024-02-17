@@ -178,7 +178,7 @@ end
 
 ### Access to States
 
-In Defold, each script that utilizes the FSM should contain at minimum a `function init(self, parent)` function. 
+In Defold, each script that utilizes the FSM should contain at minimum a `function init(self, parent, [options])` function. 
 
 In this implementation, manual positioning of any moving objects that are altered by a State, should be handled in that State's `update()` function.
 
