@@ -100,7 +100,7 @@ function init(self)
 end
 ```
 
-#Super State
+# Super State
 
 This is an optional state module that contains functions that can be accessed from within a sub state. IE:
 ```lua
