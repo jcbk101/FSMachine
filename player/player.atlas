@@ -231,17 +231,6 @@ animations {
   flip_vertical: 0
 }
 animations {
-  id: "health"
-  images {
-    image: "/player/shibori/health_bar.png"
-    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
-  }
-  playback: PLAYBACK_ONCE_FORWARD
-  fps: 12
-  flip_horizontal: 0
-  flip_vertical: 0
-}
-animations {
   id: "hood_beam"
   images {
     image: "/player/shibori/hood_beam_000.png"
@@ -463,9 +452,9 @@ animations {
   flip_vertical: 0
 }
 animations {
-  id: "hood_fal"
+  id: "hood_fall"
   images {
-    image: "/player/shibori/hood_fall_00.png"
+    image: "/player/shibori/hood_fall_000.png"
     sprite_trim_mode: SPRITE_TRIM_MODE_OFF
   }
   playback: PLAYBACK_ONCE_FORWARD
@@ -746,41 +735,6 @@ animations {
   }
   images {
     image: "/player/shibori/hood_push_006.png"
-    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
-  }
-  playback: PLAYBACK_LOOP_FORWARD
-  fps: 12
-  flip_horizontal: 0
-  flip_vertical: 0
-}
-animations {
-  id: "hood_rope_run"
-  images {
-    image: "/player/shibori/hood_rope_run_000.png"
-    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
-  }
-  images {
-    image: "/player/shibori/hood_rope_run_001.png"
-    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
-  }
-  images {
-    image: "/player/shibori/hood_rope_run_002.png"
-    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
-  }
-  images {
-    image: "/player/shibori/hood_rope_run_003.png"
-    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
-  }
-  images {
-    image: "/player/shibori/hood_rope_run_004.png"
-    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
-  }
-  images {
-    image: "/player/shibori/hood_rope_run_005.png"
-    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
-  }
-  images {
-    image: "/player/shibori/hood_rope_run_006.png"
     sprite_trim_mode: SPRITE_TRIM_MODE_OFF
   }
   playback: PLAYBACK_LOOP_FORWARD
@@ -1271,41 +1225,6 @@ animations {
   }
   images {
     image: "/player/shibori/push_006.png"
-    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
-  }
-  playback: PLAYBACK_LOOP_FORWARD
-  fps: 12
-  flip_horizontal: 0
-  flip_vertical: 0
-}
-animations {
-  id: "rope_run"
-  images {
-    image: "/player/shibori/rope_run_000.png"
-    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
-  }
-  images {
-    image: "/player/shibori/rope_run_001.png"
-    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
-  }
-  images {
-    image: "/player/shibori/rope_run_002.png"
-    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
-  }
-  images {
-    image: "/player/shibori/rope_run_003.png"
-    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
-  }
-  images {
-    image: "/player/shibori/rope_run_004.png"
-    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
-  }
-  images {
-    image: "/player/shibori/rope_run_005.png"
-    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
-  }
-  images {
-    image: "/player/shibori/rope_run_006.png"
     sprite_trim_mode: SPRITE_TRIM_MODE_OFF
   }
   playback: PLAYBACK_LOOP_FORWARD

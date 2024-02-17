@@ -1,12 +1,13 @@
 local utils = require("modules.utils")
 
-local gravity = -2200
-local max_speed = 500
-local air_acceleration_factor = 0.8
-local ANGLE_THRESHOLD = 46
-local NORMAL_THRESHOLD = 0.7
-
 local M = {}
+
+M.gravity = -2200
+M.jump_takeoff_speed = 1100
+M.max_speed = 500
+M.air_acceleration_factor = 0.8
+M.ANGLE_THRESHOLD = 46
+M.NORMAL_THRESHOLD = 0.7
 
 ---------------------------------
 --
@@ -14,7 +15,7 @@ local M = {}
 function M.SlopeCheck(self, position)
 
 	local scale = go.get("#sprite", "scale")
-	local slopeDistance = max_speed * 0.1
+	local slopeDistance = M.max_speed * 0.1
 	local size = vmath.mul_per_elem(self.sprSize, scale)
 
 	local from = vmath.vector3(position.x, position.y, position.z)	
@@ -53,7 +54,7 @@ function M.SlopeCheck(self, position)
 	if ang == 0 then
 		self.isOnSlope = nil
 	else
-		if ang > ANGLE_THRESHOLD then
+		if ang > M.ANGLE_THRESHOLD then
 			self.slopeY = nil
 			self.isOnSlope = nil
 		else
@@ -75,14 +76,14 @@ function M.BasicMove(parent, action_id, action, speedAdjust, is_confused )
 			sprite.set_hflip("#sprite", true)
 			physics.set_hflip("#is_push", true)
 			physics.set_hflip("#is_trigger", true)		
-			parent.velocity.x = -max_speed * speedAdjust
+			parent.velocity.x = -M.max_speed * speedAdjust
 			parent.direction = -1
 			return true
 		elseif action_id == hash("left") and action.value and action.value > 0 then
 			sprite.set_hflip("#sprite", false)
 			physics.set_hflip("#is_push", false)
 			physics.set_hflip("#is_trigger", false)
-			parent.velocity.x = max_speed * speedAdjust
+			parent.velocity.x = M.max_speed * speedAdjust
 			parent.direction = 1
 			return true
 		end		
@@ -91,14 +92,14 @@ function M.BasicMove(parent, action_id, action, speedAdjust, is_confused )
 			sprite.set_hflip("#sprite", true)
 			physics.set_hflip("#is_push", true)
 			physics.set_hflip("#is_trigger", true)		
-			parent.velocity.x = -max_speed * speedAdjust
+			parent.velocity.x = -M.max_speed * speedAdjust
 			parent.direction = -1
 			return true
 		elseif action_id == hash("right") and action.value and action.value > 0 then
 			sprite.set_hflip("#sprite", false)
 			physics.set_hflip("#is_push", false)
 			physics.set_hflip("#is_trigger", false)
-			parent.velocity.x = max_speed * speedAdjust
+			parent.velocity.x = M.max_speed * speedAdjust
 			parent.direction = 1
 			return true
 		end
@@ -126,10 +127,15 @@ function M.ApplyGravity(parent, pos, dt)
 			pos.y = parent.slopeY					
 			pos.x = (pos.x + parent.velocity.x * dt)					
 		else
-			parent.velocity.y = parent.velocity.y + (gravity * dt)
+			parent.velocity.y = parent.velocity.y + (M.gravity * dt)
 			if parent.velocity.y < -1250.0 then 
 				parent.velocity.y = -1250.0
 			end
+			-- Used to keep the character from being stuck on wall collider tiles
+			if parent.wall_contact then
+				parent.velocity.x = parent.velocity.x * .5
+			end
+						
 			pos = (pos + parent.velocity * dt)
 		end
 	end	

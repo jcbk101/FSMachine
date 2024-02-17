@@ -2,7 +2,7 @@ local utils = require("modules.utils")
 local fsm = require("modules.fsm_engine")
 
 -- Super state: Contains shared functions
-local playerState = require("player.states.playerState") -- State the contains shared functions
+local playerState = require("player.states.playerState") -- State that contains shared functions
 -- List of sub states
 local idleState = require("player.states.idleState")
 local runState = require("player.states.runState")
@@ -62,7 +62,8 @@ function init(self)
 		confused = confusedState,
 		frozen = frozenState,
 		stun = stunState,
-		dead = deadState
+		dead = deadState,
+		rope = ropeState
 	}
 
 	-- Second argument is the state (table) the contaions shared functions. 

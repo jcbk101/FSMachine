@@ -42,14 +42,13 @@ M.input = function(self, parent, action_id, action)
 				self:changeState(parent, "idle")
 			else
 				local anim = go.get("#sprite", "animation")
-
+				
 				if parent.canPush and anim ~= hash("push") then
 					sprite.play_flipbook("#sprite", "push")
 				elseif not parent.canPush and anim ~= hash("run") and anim ~= hash("throw_run") then
 					sprite.play_flipbook("#sprite", "run")
 				end
-				--
-				self.BasicMove(parent, action_id, action, air_acceleration_factor)
+				self.BasicMove(parent, action_id, action, parent.canPush and .75 or 1)
 			end
 		end			
 	end			

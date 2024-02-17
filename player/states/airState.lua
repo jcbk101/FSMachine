@@ -58,10 +58,11 @@ end
 M.fixed_update = function(self, parent, dt)
 	if not self.is_exiting then		
 		local pos = go.get_position()
-
+				
 		if not parent.ground_contact then
 			self.isOnSlope = nil
 			self.slopeY = nil
+
 			pos = self.ApplyGravity(parent, pos, dt)
 
 			-- Handle the throw animation
@@ -81,10 +82,10 @@ M.fixed_update = function(self, parent, dt)
 				return
 			end
 
-			if parent.wall_contact then
-				parent.velocity.x = 0
-			end
-
+			-- if parent.wall_contact then
+			-- 	parent.velocity.x = 0
+			-- end
+			-- 
 			--------------------------------------
 			go.set_position(pos)
 			parent.wall_cntact = false

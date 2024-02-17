@@ -11,5 +11,5 @@ Thumbs.db
 *.ini
 *Copy*.script
 *.exe
-/new_pup
+/player/new_pup
 builtins
