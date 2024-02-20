@@ -29,7 +29,7 @@ M.input = function(self, parent, action_id, action)
 			self:changeState(parent, "idle")
 		elseif (action_id == hash("left") or action_id == hash("right")) then
 			if (action.value and action.value == 0) then
-				self:changeState(parent, "crouch_idle")
+				self:changeState(parent, "crouch")
 			else
 				self.BasicMove(parent, action_id, action, 0.35)
 			end

@@ -9,12 +9,16 @@ M.falls = 0
 -----------------------------------
 M.init = function(self, parent)
 	self.is_exiting = false
-	sprite.play_flipbook("#sprite", "crouch")
+	-- Change to Idle ONLY is not already idling
 	if go.get("#sprite", "animation") ~= hash("crouch") then
 		sprite.play_flipbook("#sprite", "crouch")
 	end
-	parent.velocity.x = 0
+	parent.states.jump.jumpAmount = 2
+	parent.velocity.y = 0
+	parent.velocity.x =  0
 	parent.isOnSlope = nil
+	self.throw_time = parent.throw_time
+	parent.throw_time = nil
 	self.falls = 0
 end
 
@@ -29,22 +33,27 @@ end
 -- Process input
 -----------------------------------
 M.input = function(self, parent, action_id, action)
-	if not self.is_exiting then			
-		-- DEBUG ONLY, THIS 'IF'
-		if action_id == hash("up") and action.pressed then 
-			self:changeState(parent, "idle")
-
-		elseif (action_id == hash("left") or action_id == hash("right")) and (action.value and action.value > 0) then
+	if not self.is_exiting then
+		if (action_id == hash("left") or action_id == hash("right")) and (action.value and action.value > 0) then
 			self:changeState(parent, "crawl")
-		end
+		elseif action_id == hash("up") and (action and action.pressed) then
+			self:changeState(parent, "idle")
+		end					
 	end		
+end
+
+-----------------------------------
+-- Update function
+-----------------------------------
+M.update = function(self, parent, dt)
+-- Do not have to declare
 end
 
 
 -----------------------------------
 -- Fixed update function
 -----------------------------------
-M.fixed_update = function(self,parent,dt)
+M.fixed_update = function(self, parent, dt)
 
 	local pos = go.get_position()
 
@@ -54,13 +63,20 @@ M.fixed_update = function(self,parent,dt)
 
 	-----------------------------------------
 	if not parent.ground_contact then
-		-- Switch the animation here. 
-		-- Calling from from 'AIR STATE' can disrupt a jump animation
-		sprite.play_flipbook("#sprite", "fall")
-		self:changeState(parent, "air")
+		parent.throw_time = self.throw_time
+		self.throw_time = nil
+		self:changeState(parent, "fall")
 		return
 	end		
 
+	-- Handle the throw animation for idling
+	if self.throw_time then
+		self.throw_time = self.throw_time - dt
+		if self.throw_time <= 0 then
+			self.throw_time = nil
+			sprite.play_flipbook("#sprite", "idle")
+		end
+	end
 	------------------------------------
 	go.set_position(pos)
 	if parent.ground_contact == true then
@@ -68,7 +84,6 @@ M.fixed_update = function(self,parent,dt)
 	end				
 	parent.ground_contact = false
 	parent.correction.x, parent.correction.y, parent.correction.z = 0, 0, 0			
-
 end
 
 return M

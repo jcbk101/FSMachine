@@ -39,7 +39,31 @@ animations {
     image: "/player/shibori/cliff_hang_000.png"
     sprite_trim_mode: SPRITE_TRIM_MODE_OFF
   }
-  playback: PLAYBACK_ONCE_FORWARD
+  images {
+    image: "/player/shibori/cliff_hang_001.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/player/shibori/cliff_hang_002.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/player/shibori/cliff_hang_003.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/player/shibori/cliff_hang_004.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/player/shibori/cliff_hang_005.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/player/shibori/cliff_hang_006.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  playback: PLAYBACK_LOOP_FORWARD
   fps: 12
   flip_horizontal: 0
   flip_vertical: 0
@@ -109,43 +133,8 @@ animations {
     image: "/player/shibori/crouch_006.png"
     sprite_trim_mode: SPRITE_TRIM_MODE_OFF
   }
-  playback: PLAYBACK_ONCE_FORWARD
-  fps: 12
-  flip_horizontal: 0
-  flip_vertical: 0
-}
-animations {
-  id: "crouch_idle"
-  images {
-    image: "/player/shibori/crouch_idle_000.png"
-    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
-  }
-  images {
-    image: "/player/shibori/crouch_idle_001.png"
-    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
-  }
-  images {
-    image: "/player/shibori/crouch_idle_002.png"
-    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
-  }
-  images {
-    image: "/player/shibori/crouch_idle_003.png"
-    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
-  }
-  images {
-    image: "/player/shibori/crouch_idle_004.png"
-    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
-  }
-  images {
-    image: "/player/shibori/crouch_idle_005.png"
-    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
-  }
-  images {
-    image: "/player/shibori/crouch_idle_006.png"
-    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
-  }
   playback: PLAYBACK_LOOP_FORWARD
-  fps: 12
+  fps: 8
   flip_horizontal: 0
   flip_vertical: 0
 }
@@ -225,7 +214,31 @@ animations {
     image: "/player/shibori/fall_000.png"
     sprite_trim_mode: SPRITE_TRIM_MODE_OFF
   }
-  playback: PLAYBACK_ONCE_FORWARD
+  images {
+    image: "/player/shibori/fall_001.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/player/shibori/fall_002.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/player/shibori/fall_003.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/player/shibori/fall_004.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/player/shibori/fall_005.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/player/shibori/fall_006.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  playback: PLAYBACK_LOOP_FORWARD
   fps: 12
   flip_horizontal: 0
   flip_vertical: 0
@@ -269,6 +282,30 @@ animations {
   id: "hood_cliff_hang"
   images {
     image: "/player/shibori/hood_cliff_hang_000.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/player/shibori/hood_cliff_hang_001.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/player/shibori/hood_cliff_hang_002.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/player/shibori/hood_cliff_hang_003.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/player/shibori/hood_cliff_hang_004.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/player/shibori/hood_cliff_hang_005.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/player/shibori/hood_cliff_hang_006.png"
     sprite_trim_mode: SPRITE_TRIM_MODE_OFF
   }
   playback: PLAYBACK_ONCE_FORWARD
@@ -347,41 +384,6 @@ animations {
   flip_vertical: 0
 }
 animations {
-  id: "hood_crouch_idle"
-  images {
-    image: "/player/shibori/hood_crouch_idle_000.png"
-    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
-  }
-  images {
-    image: "/player/shibori/hood_crouch_idle_001.png"
-    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
-  }
-  images {
-    image: "/player/shibori/hood_crouch_idle_002.png"
-    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
-  }
-  images {
-    image: "/player/shibori/hood_crouch_idle_003.png"
-    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
-  }
-  images {
-    image: "/player/shibori/hood_crouch_idle_004.png"
-    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
-  }
-  images {
-    image: "/player/shibori/hood_crouch_idle_005.png"
-    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
-  }
-  images {
-    image: "/player/shibori/hood_crouch_idle_006.png"
-    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
-  }
-  playback: PLAYBACK_LOOP_FORWARD
-  fps: 12
-  flip_horizontal: 0
-  flip_vertical: 0
-}
-animations {
   id: "hood_die"
   images {
     image: "/player/shibori/hood_die_000.png"
@@ -455,6 +457,30 @@ animations {
   id: "hood_fall"
   images {
     image: "/player/shibori/hood_fall_000.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/player/shibori/hood_fall_001.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/player/shibori/hood_fall_002.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/player/shibori/hood_fall_003.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/player/shibori/hood_fall_004.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/player/shibori/hood_fall_005.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/player/shibori/hood_fall_006.png"
     sprite_trim_mode: SPRITE_TRIM_MODE_OFF
   }
   playback: PLAYBACK_ONCE_FORWARD
@@ -638,41 +664,6 @@ animations {
   flip_vertical: 0
 }
 animations {
-  id: "hood_pull"
-  images {
-    image: "/player/shibori/hood_pull_000.png"
-    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
-  }
-  images {
-    image: "/player/shibori/hood_pull_001.png"
-    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
-  }
-  images {
-    image: "/player/shibori/hood_pull_002.png"
-    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
-  }
-  images {
-    image: "/player/shibori/hood_pull_003.png"
-    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
-  }
-  images {
-    image: "/player/shibori/hood_pull_004.png"
-    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
-  }
-  images {
-    image: "/player/shibori/hood_pull_005.png"
-    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
-  }
-  images {
-    image: "/player/shibori/hood_pull_006.png"
-    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
-  }
-  playback: PLAYBACK_ONCE_FORWARD
-  fps: 12
-  flip_horizontal: 0
-  flip_vertical: 0
-}
-animations {
   id: "hood_punch"
   images {
     image: "/player/shibori/hood_punch_000.png"
@@ -735,6 +726,41 @@ animations {
   }
   images {
     image: "/player/shibori/hood_push_006.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  playback: PLAYBACK_LOOP_FORWARD
+  fps: 12
+  flip_horizontal: 0
+  flip_vertical: 0
+}
+animations {
+  id: "hood_rope_run"
+  images {
+    image: "/player/shibori/hood_rope_run_000.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/player/shibori/hood_rope_run_001.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/player/shibori/hood_rope_run_002.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/player/shibori/hood_rope_run_003.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/player/shibori/hood_rope_run_004.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/player/shibori/hood_rope_run_005.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/player/shibori/hood_rope_run_006.png"
     sprite_trim_mode: SPRITE_TRIM_MODE_OFF
   }
   playback: PLAYBACK_LOOP_FORWARD
@@ -807,7 +833,7 @@ animations {
     image: "/player/shibori/hood_stun_006.png"
     sprite_trim_mode: SPRITE_TRIM_MODE_OFF
   }
-  playback: PLAYBACK_LOOP_FORWARD
+  playback: PLAYBACK_ONCE_FORWARD
   fps: 12
   flip_horizontal: 0
   flip_vertical: 0
@@ -953,6 +979,41 @@ animations {
   flip_vertical: 0
 }
 animations {
+  id: "hood_wall_jump"
+  images {
+    image: "/player/shibori/hood_wall_jump_000.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/player/shibori/hood_wall_jump_001.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/player/shibori/hood_wall_jump_002.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/player/shibori/hood_wall_jump_003.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/player/shibori/hood_wall_jump_004.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/player/shibori/hood_wall_jump_005.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/player/shibori/hood_wall_jump_006.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  playback: PLAYBACK_ONCE_FORWARD
+  fps: 12
+  flip_horizontal: 0
+  flip_vertical: 0
+}
+animations {
   id: "hurt"
   images {
     image: "/player/shibori/hurt_000.png"
@@ -1018,7 +1079,7 @@ animations {
     sprite_trim_mode: SPRITE_TRIM_MODE_OFF
   }
   playback: PLAYBACK_LOOP_FORWARD
-  fps: 12
+  fps: 8
   flip_horizontal: 0
   flip_vertical: 0
 }
@@ -1128,41 +1189,6 @@ animations {
   flip_vertical: 0
 }
 animations {
-  id: "pull"
-  images {
-    image: "/player/shibori/pull_000.png"
-    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
-  }
-  images {
-    image: "/player/shibori/pull_001.png"
-    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
-  }
-  images {
-    image: "/player/shibori/pull_002.png"
-    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
-  }
-  images {
-    image: "/player/shibori/pull_003.png"
-    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
-  }
-  images {
-    image: "/player/shibori/pull_004.png"
-    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
-  }
-  images {
-    image: "/player/shibori/pull_005.png"
-    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
-  }
-  images {
-    image: "/player/shibori/pull_006.png"
-    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
-  }
-  playback: PLAYBACK_ONCE_FORWARD
-  fps: 12
-  flip_horizontal: 0
-  flip_vertical: 0
-}
-animations {
   id: "punch"
   images {
     image: "/player/shibori/punch_000.png"
@@ -1225,6 +1251,41 @@ animations {
   }
   images {
     image: "/player/shibori/push_006.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  playback: PLAYBACK_LOOP_FORWARD
+  fps: 12
+  flip_horizontal: 0
+  flip_vertical: 0
+}
+animations {
+  id: "rope_run"
+  images {
+    image: "/player/shibori/rope_run_000.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/player/shibori/rope_run_001.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/player/shibori/rope_run_002.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/player/shibori/rope_run_003.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/player/shibori/rope_run_004.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/player/shibori/rope_run_005.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/player/shibori/rope_run_006.png"
     sprite_trim_mode: SPRITE_TRIM_MODE_OFF
   }
   playback: PLAYBACK_LOOP_FORWARD
@@ -1442,9 +1503,44 @@ animations {
   flip_horizontal: 0
   flip_vertical: 0
 }
+animations {
+  id: "wall_jump"
+  images {
+    image: "/player/shibori/wall_jump_000.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/player/shibori/wall_jump_001.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/player/shibori/wall_jump_002.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/player/shibori/wall_jump_003.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/player/shibori/wall_jump_004.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/player/shibori/wall_jump_005.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/player/shibori/wall_jump_006.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  playback: PLAYBACK_ONCE_FORWARD
+  fps: 12
+  flip_horizontal: 0
+  flip_vertical: 0
+}
 margin: 0
 extrude_borders: 2
 inner_padding: 0
-max_page_width: 0
-max_page_height: 0
+max_page_width: 2048
+max_page_height: 1024
 rename_patterns: ""

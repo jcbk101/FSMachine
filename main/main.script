@@ -7,10 +7,10 @@ local playerState = require("player.states.playerState") -- State that contains 
 local idleState = require("player.states.idleState")
 local runState = require("player.states.runState")
 local crouchState = require("player.states.crouchState")
-local crouchIdleState = require("player.states.crouchIdleState")
 local crawlState = require("player.states.crawlState")
 local jumpState = require("player.states.jumpState")
 local airState = require("player.states.airState")
+local wallState = require("player.states.wallState")
 local fallState = require("player.states.fallState")
 local landState = require("player.states.landState")
 local hurtState = require("player.states.hurtState")
@@ -52,10 +52,10 @@ function init(self)
 		idle = idleState,
 		run = runState,
 		crouch = crouchState,
-		crouch_idle = crouchIdleState,
 		crawl = crawlState,
 		jump = jumpState,
 		air = airState,
+		--wall = wallState,
 		fall = fallState,
 		land = landState,
 		hurt = hurtState,
@@ -143,7 +143,7 @@ local function handle_obstacle_contact(self, normal, distance, yAxis)
 			comp = ((distance - distance * proj) * normal)
 
 			-- Correct position when NOT on a slope. If on a slope, corection already handled
-			if self.isOnSlope then
+			if self.isOnSlope or self.is_wallSliding then
 				comp.y = 0
 				comp.x = 0
 			end
@@ -158,6 +158,7 @@ local function handle_obstacle_contact(self, normal, distance, yAxis)
 	-- We Hit a wall when the angle is greater than the angle threshold
 	if angle > ANGLE_THRESHOLD then
 		self.wall_contact = true
+		self.wall_side = math.abs(normal.x) == 1 and normal.x or nil
 	end
 
 	-- Collided with the ground
@@ -184,7 +185,6 @@ function on_message(self, message_id, message, sender)
 	if message_id == hash("contact_point_response") then
 		-- check that the object is something we consider an obstacle
 		if message.group == hash("ground") or message.group == hash("object") then
-			--pprint(message)
 			handle_obstacle_contact(self, message.normal, message.distance)
 		end
 	elseif message_id == hash("trigger_response") then
@@ -210,11 +210,11 @@ function final(self)
 	package.loaded["player.states.idleState"] = nil
 	package.loaded["player.states.runState"] = nil
 	package.loaded["player.states.crouchState"] = nil
-	package.loaded["player.states.crouchIdleState"] = nil
 	package.loaded["player.states.crawlState"] = nil
 	package.loaded["player.states.jumpState"] = nil
 	package.loaded["player.states.airState"] = nil
 	package.loaded["player.states.fallState"] = nil
+	package.loaded["player.states.wallState"] = nil	
 	package.loaded["player.states.landState"] = nil
 	package.loaded["player.states.hurtState"] = nil
 	package.loaded["player.states.confusedState"] = nil

@@ -14,7 +14,7 @@ M.init = function(self, parent, options)
 	self.time = self.getAnimationFrames("#sprite", "hurt").time
 	sprite.play_flipbook("#sprite", "hurt")
 	-- Do knockback
-	self.knockback = vmath.vector3(max_speed * options.force * options.direction, 0, 0)
+	self.knockback = vmath.vector3(self.max_speed * options.force * options.direction, 0, 0)
 	self.knockback_timer = 0.1
 end
 

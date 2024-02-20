@@ -6,7 +6,7 @@ M.jumpAmount = 2
 -----------------------------------
 -- Initialize state
 -----------------------------------
-M.init = function(self, parent)
+M.init = function(self, parent, options)
 	if self.jumpAmount > 0 then
 		parent.velocity.y = self.jump_takeoff_speed * (self.jumpAmount == 2 and 1 or 0.75)
 		if not parent.throw_time then

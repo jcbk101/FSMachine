@@ -11,7 +11,6 @@ M.init = function(self, parent)
 	parent.isOnSlope = nil
 	parent.slopeY = nil
 
-	print(parent.throw_time)
 	self.throw_time = parent.throw_time
 	parent.throw_time = nil
 	if not self.throw_time then
@@ -71,9 +70,9 @@ M.fixed_update = function(self, parent, dt)
 			pos = self.ApplyGravity(parent, pos, dt)
 
 			if parent.wall_contact then
-				parent.velocity.x = 0
+				parent.velocity.x = 0			
 			end
-
+			
 			--------------------------------------
 			go.set_position(pos)
 			parent.wall_cntact = false

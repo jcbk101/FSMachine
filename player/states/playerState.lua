@@ -63,6 +63,31 @@ function M.SlopeCheck(self, position)
 	end
 end
 
+
+-- ---------------------------------
+-- --
+-- ---------------------------------
+-- function M.CheckForWall(self, position)
+-- 
+-- 	local from = vmath.vector3(position.x, position.y, position.z)	
+-- 	local to = vmath.vector3(from.x + (self.direction * 32), from.y, from.z)	
+-- 	local hit = physics.raycast(from, to, { hash("ground") })
+-- 
+-- 	msg.post("@render:", "draw_line", { start_point = to, end_point = from, color = vmath.vector4(1, 0, 1, 1) })	
+-- 
+-- 	print("WALL: ", from.x, to.x, (hit and hit.normal or "nil"))
+-- 	if hit then
+-- 		msg.post("@render:", "draw_line", { start_point = hit.position, end_point = from, color = vmath.vector4(1, 1, 1, 1) })
+-- 		if math.abs(hit.normal.x) == 1 then
+-- 			self.wall_contact = true
+-- 		end
+-- 	else
+-- 		--self.wall_contact = nil
+-- 	end	
+-- 
+-- end
+-- 
+
 ---------------------------------
 -- Common movement
 ---------------------------------
@@ -135,7 +160,7 @@ function M.ApplyGravity(parent, pos, dt)
 			if parent.wall_contact then
 				parent.velocity.x = parent.velocity.x * .5
 			end
-						
+
 			pos = (pos + parent.velocity * dt)
 		end
 	end	

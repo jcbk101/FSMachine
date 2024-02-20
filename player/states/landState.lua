@@ -9,6 +9,7 @@ M.is_exiting = false
 M.init = function(self, parent)
 	self.is_exiting = false
 	parent.states.jump.jumpAmount = 2
+	parent.wall_contact = nil
 end
 
 -----------------------------------

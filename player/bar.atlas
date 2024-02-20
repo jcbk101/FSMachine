@@ -1,5 +1,5 @@
 images {
-  image: "/player/shibori/health_bar.png"
+  image: "/assets/objects/health_bar.png"
   sprite_trim_mode: SPRITE_TRIM_MODE_OFF
 }
 margin: 0
